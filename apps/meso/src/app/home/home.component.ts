@@ -198,7 +198,7 @@ const initialProjectState: ProjectState = {
   currentProject: newProject,
 };
 
-const projectState = initialProjectState;
+const projectsState = initialProjectState;
 
 const PROJECT_LOAD = '[Project] Load';
 const PROJECT_CREATE = '[Project] Create';
