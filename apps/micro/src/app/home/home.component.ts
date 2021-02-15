@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
-  price;
+  price: number;
   widgets: Widget[];
 
   reCalculateTotal(mode: Mode, widgets: Widget[], widget: Widget) {
@@ -28,7 +28,7 @@ export class HomeComponent {
         this.widgets = this.deleteWidget(widgets, widget);
         break;
       default:
-        return this.widgets;
+        return widgets;
     }
   }
 

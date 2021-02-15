@@ -57,52 +57,52 @@ const CLIENT_CLEAR = '[Client] Clear';
 
 const addEntity = (collection, entity) => [...collection, entity];
 const updateEntity = (collection, entity) =>
-  collection.map(e => e.id === entity.id ? Object.assign({}, entity) : e);
+  collection.map((e) => (e.id === entity.id ? Object.assign({}, entity) : e));
 const deleteEntity = (collection, entity) =>
-  collection.filter(e => e.id !== entity.id);
+  collection.filter((e) => e.id !== entity.id);
 
 const loadClients = (state, clients): ClientsState => {
   return {
     clients,
-    currentClient: state.currentClient
-  }
+    currentClient: state.currentClient,
+  };
 };
 
 const selectClient = (state, client): ClientsState => {
   return {
     clients: state.clients,
-    currentClient: client
-  }
+    currentClient: client,
+  };
 };
 
 const clearClient = (state): ClientsState => {
   return {
     clients: state.clients,
-    currentClient: null
-  }
+    currentClient: null,
+  };
 };
 
 const createClient = (state, client): ClientsState => {
   return {
     clients: [...state.clients, client],
-    currentClient: state.currentClient
-  }
+    currentClient: state.currentClient,
+  };
 };
 
 const updateClient = (state, client): ClientsState => {
   return {
-    clients: state.clients.map(c => {
-      return (c.id === client.id) ? Object.assign({}, client) : c;
+    clients: state.clients.map((c) => {
+      return c.id === client.id ? Object.assign({}, client) : c;
     }),
-    currentClient: state.currentClient
-  }
+    currentClient: state.currentClient,
+  };
 };
 
 const deleteClient = (state, client): ClientsState => {
   return {
-    clients: state.clients.filter(c => c.id !== client.id),
-    currentClient: state.currentClient
-  }
+    clients: state.clients.filter((c) => c.id !== client.id),
+    currentClient: state.currentClient,
+  };
 };
 
 const clientsReducer = (
@@ -153,12 +153,12 @@ const jane: Client = {
   id: '123',
   firstName: 'Jane',
   lastName: 'Doe',
-  company: 'Anon'
-}
+  company: 'Anon',
+};
 
 const clientsStore = new ClientsStore(initialClientsState, clientsReducer);
 const aClient = clientsStore.select('currentClient');
-clientsStore.dispatch({ type: CLIENT_CREATE, payload: jane});
+clientsStore.dispatch({ type: CLIENT_CREATE, payload: jane });
 const allClients = clientsStore.select('clients');
 
 interface Project extends BaseEntity {
@@ -167,22 +167,17 @@ interface Project extends BaseEntity {
   completed: boolean;
 }
 
-interface ProjectsState {
-  projects: Project[];
-  currentProject: Project;
-}
-
-const superProject: Project = {
+const projectOne: Project = {
   id: '1',
-  title: 'Super Project',
-  description: 'This is awesome!',
+  title: 'title1',
+  description: 'description1',
   completed: false,
 };
 
-const hellProject: Project = {
+const projectTwo: Project = {
   id: '2',
-  title: 'Hell Project on Earth',
-  description: 'Just make it stop',
+  title: 'title2',
+  description: 'description2',
   completed: true,
 };
 
@@ -192,6 +187,18 @@ const newProject: Project = {
   description: '',
   completed: false,
 };
+
+interface ProjectState {
+  projects: Project[];
+  currentProject: Project;
+}
+
+const initialProjectState: ProjectState = {
+  projects: [projectOne, projectTwo],
+  currentProject: newProject,
+};
+
+const projectState = initialProjectState;
 
 const PROJECT_LOAD = '[Project] Load';
 const PROJECT_CREATE = '[Project] Create';
@@ -251,7 +258,6 @@ const projectsReducer = (
       return state;
   }
 };
-
 
 const projects: Project[] = [superProject, hellProject];
 
