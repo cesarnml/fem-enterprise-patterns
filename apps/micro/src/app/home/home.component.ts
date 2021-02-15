@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Widget } from '@fem/api-interfaces';
+import { Mode, Widget } from '@fem/api-interfaces';
 import { v4 as uuidv4 } from 'uuid';
 
 @Component({
@@ -9,43 +9,45 @@ import { v4 as uuidv4 } from 'uuid';
 })
 export class HomeComponent {
   price;
-  mode;
   widgets: Widget[];
 
-  reCalculateTotal(mode: string, widgets: Widget[], widget: Widget) {
+  reCalculateTotal(mode: Mode, widgets: Widget[], widget: Widget) {
     this.widgets = this.updateWidgets(mode, widgets, widget);
     this.price = this.getTotalPrice(widgets);
   }
 
-  updateWidgets(mode: string, widgets: Widget[], widget: Widget) {
+  updateWidgets(mode: Mode, widgets: Widget[], widget: Widget) {
     switch (mode) {
-      case 'create':
-        return this.addWidget(widgets, widget);
-      case 'update':
-        return this.updateWidget(widgets, widget);
-      case 'delete':
-        return this.deleteWidget(widgets, widget);
-      default:
+      case Mode.Create:
+        this.widgets = this.addWidget(widgets, widget);
         break;
+      case Mode.Update:
+        this.widgets = this.updateWidget(widgets, widget);
+        break;
+      case Mode.Delete:
+        this.widgets = this.deleteWidget(widgets, widget);
+        break;
+      default:
+        return this.widgets;
     }
   }
 
-  getTotalPrice(widgets) {
-    return widgets.reduce((acc, curr) => acc + curr.price, 0)
-  }
-
-  addWidget(widgets, widget) {
-    const newWidget = Object.assign({}, widget, { id: uuidv4() });
+  addWidget(widgets: Widget[], widget: Widget) {
+    const newWidget = { ...widget, id: uuidv4() };
     return [...widgets, newWidget];
   }
 
-  updateWidget(widgets, widget) {
-    return widgets.map((wdgt) =>
-      widget.id === wdgt.id ? Object.assign({}, widget) : wdgt
+  updateWidget(widgets: Widget[], widget: Widget) {
+    return widgets.map((_widget) =>
+      _widget.id === widget.id ? widget : _widget
     );
   }
 
-  deleteWidget(widgets, widget) {
-    return widgets.filter((wdgt) => widget.id !== wdgt.id);
+  deleteWidget(widgets: Widget[], widget: Widget) {
+    return widgets.filter((_widget) => _widget.id !== widget.id);
+  }
+
+  getTotalPrice(widgets: Widget[]) {
+    return widgets.reduce((acc, curr) => acc + curr.price, 0);
   }
 }

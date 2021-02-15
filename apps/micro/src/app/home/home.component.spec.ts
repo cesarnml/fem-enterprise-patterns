@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Widget } from '@fem/api-interfaces';
+import { Widget, Mode } from '@fem/api-interfaces';
 
 import { HomeComponent } from './home.component';
 
@@ -9,9 +9,8 @@ describe('HomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HomeComponent ]
-    })
-    .compileComponents();
+      declarations: [HomeComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -28,9 +27,14 @@ describe('HomeComponent', () => {
     spyOn(component, 'updateWidgets').and.callThrough();
     spyOn(component, 'getTotalPrice').and.callThrough();
 
-    const mockMode = 'create';
+    const mockMode = Mode.Create;
     const mockWidgets = [];
-    const mockWidget = { id: '1', title: 'mock', description: 'mock', price: 100 };
+    const mockWidget = {
+      id: '1',
+      title: 'mock',
+      description: 'mock',
+      price: 100,
+    };
 
     component.reCalculateTotal(mockMode, mockWidgets, mockWidget);
 
@@ -43,19 +47,24 @@ describe('HomeComponent', () => {
   });
 
   it('should call the appropriate method depending on mode in updateWidgets', () => {
-    const mockWidget = { id: '1', title: 'mock', description: 'mock', price: 100 };
+    const mockWidget = {
+      id: '1',
+      title: 'mock',
+      description: 'mock',
+      price: 100,
+    };
 
     spyOn(component, 'addWidget').and.callThrough();
     spyOn(component, 'updateWidget').and.callThrough();
     spyOn(component, 'deleteWidget').and.callThrough();
 
-    component.updateWidgets('create', [], mockWidget);
+    component.updateWidgets(Mode.Create, [], mockWidget);
     expect(component.addWidget).toHaveBeenCalledWith([], mockWidget);
 
-    component.updateWidgets('update', [], mockWidget);
+    component.updateWidgets(Mode.Update, [], mockWidget);
     expect(component.updateWidget).toHaveBeenCalledWith([], mockWidget);
 
-    component.updateWidgets('delete', [], mockWidget);
+    component.updateWidgets(Mode.Delete, [], mockWidget);
     expect(component.deleteWidget).toHaveBeenCalledWith([], mockWidget);
   });
 
@@ -63,7 +72,7 @@ describe('HomeComponent', () => {
     let widgets = [];
     const widget = {
       id: null,
-      name: 'new item',
+      title: 'new item',
       description: 'new item',
       price: 100,
     };
@@ -77,11 +86,11 @@ describe('HomeComponent', () => {
 
   it('should update a widget on updateWidget', () => {
     let widgets = [
-      { id: 100, name: 'new item', description: 'new item', price: 100 },
+      { id: '100', title: 'new item', description: 'new item', price: 100 },
     ];
     const widget = {
-      id: 100,
-      name: 'UPDATED',
+      id: '100',
+      title: 'UPDATED',
       description: 'WIDGET',
       price: 100,
     };
@@ -93,11 +102,11 @@ describe('HomeComponent', () => {
 
   it('should delete a widget on deleteWidget', () => {
     let widgets = [
-      { id: 100, name: 'new item', description: 'new item', price: 100 },
+      { id: '100', title: 'new item', description: 'new item', price: 100 },
     ];
     const widget = {
-      id: 100,
-      name: 'new item',
+      id: '100',
+      title: 'new item',
       description: 'new item',
       price: 100,
     };
